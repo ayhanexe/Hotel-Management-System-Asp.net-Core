@@ -1,0 +1,9 @@
+﻿.tentac-star-selector .star-icon {
+    font-size:1.75em;
+    color:rgba(0, 0, 0, 0.5);
+    cursor:pointer;
+}
+
+.tentac-star-selector .star-icon.active {
+    color:yellow;
+}

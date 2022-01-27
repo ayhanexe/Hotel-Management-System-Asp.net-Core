@@ -1,0 +1,114 @@
+﻿@model EditReservationViewModel
+
+@{
+    ViewData["Title"] = "EditReservation";
+}
+
+<h1>EditReservation</h1>
+<div class="hotel-book-form">
+    <form asp-controller="Reservation" asp-action="EditReservation" asp-route-id="@Model.id" method="post">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hotel-input-frame">
+                    <label for="check-in">Giriş</label>
+                    @Html.EditorFor(model => model.CheckIn,
+                    new {
+                    htmlAttributes = new {
+                    @type="text",
+                    @class = "form-control datepicker-here" } })
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="hotel-input-frame">
+                    <label for="check-out" class="hotel-add-icon">Çıxış</label>
+                    @Html.EditorFor(model => model.CheckOut,
+                    new {
+                    htmlAttributes = new {
+                    @type="text",
+                    @class = "form-control datepicker-here" } })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="hotel-select-frame">
+                    <label for="person">Böyük</label>
+                    <select id="person" asp-for="AdultBedCount">
+                        @for (var i = 1; i <= @Model.Room.AdultBedCount; i++)
+                        {
+                            @if (i == @Model.AdultBedCount)
+                            {
+                                <option selected value="@i">@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="hotel-select-frame">
+                    <label for="children">Uşaq</label>
+                    <select id="children" asp-for="KidBedCount">
+                        @for (var i = 1; i <= @Model.Room.KidBedCount; i++)
+                        {
+                            @if (i == @Model.KidBedCount)
+                            {
+                                <option selected value="@i">@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-12 hotel-center">
+                <button type="submit" class="hotel-btn"><img src="~/img/icons/search.svg" class="hotel-zoom" alt="icon">Edit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/style.css" />
+}
+
+@section ScriptsBefore
+{
+    
+    <!-- page wrapper end -->
+    <!-- jquery js -->
+    <script src="~/js/plugins/jquery.min.js"></script>
+    <script src="~/js/plugins/lozad.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+    <script>
+        const observer = lozad();
+        observer.observe();
+    </script>
+    <!-- bootstrap js -->
+    <script src="~/js/plugins/bootstrap.min.js"></script>
+    <!-- nice select js -->
+
+    <script src="~/js/plugins/jquery.nice-select.min.js"></script>
+    <!-- datepicker js -->
+    <script src="~/js/plugins/datepicker.js"></script>
+    <!-- smooth scroll js -->
+    <script src="~/js/plugins/smooth-scroll.js"></script>
+    <!-- isotope js -->
+    <script src="~/js/plugins/isotope.min.js"></script>
+    <!-- mapbox js -->
+    <script src="~/js/plugins/mapbox.min.js"></script>
+    <!-- fancybox js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.2.1/lightgallery.min.js"></script>
+    <script src="~/js/plugins/fancybox.min.js"></script>
+    <!-- swiper js -->
+    <script src="~/js/plugins/swiper.min.js"></script>
+    <!-- sticky js -->
+    <script src="~/js/plugins/sticky.js"></script>
+    <!-- kinsley js -->
+
+
+
+}

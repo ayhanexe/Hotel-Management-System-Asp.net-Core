@@ -1,0 +1,46 @@
+﻿@model HotelEditViewModel
+@{
+    ViewData["Title"] = "UpdateHotel";
+}
+
+<h1>@Model.Name</h1>
+
+<form asp-controller="Hotel" asp-action="UpdateHotel" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+    <img src="~/img/@Model.Photo" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+    <div class="d-flex flex-column">
+        <label class="fw-bold">Choose Hotel Image</label>
+        <input asp-for="File" />
+    </div>
+    <div class="d-flex flex-column">
+        <input asp-for="Name" type="text" class="form-control my-2" placeholder="Name" />
+        <input asp-for="Description" type="text" class="form-control my-2" placeholder="Description" />
+    </div>
+
+    <div class="mt-2">
+        <label>Choose Hotel's Star</label>
+
+        <div class="tentac-star-selector d-flex gap-2">
+            <input asp-for="StarCount" type="hidden" value="1" />
+            @for (var i = 1; i <= 5; i++)
+            {
+                @if (i <= @Model.StarCount)
+                {
+                    <i data-count="@i" class="active star-icon bi bi-star-fill"></i>
+                }
+                else
+                {
+                    <i data-count="@i" class="active star-icon bi bi-star-fill"></i>
+                }
+            }
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary my-3 mx-auto d-block">Save</button>
+</form>
+
+@section Styles {
+<link rel="stylesheet" href="~/Admin/css/tentac-forms.css" />
+}
+
+@section Scripts {
+<script src="~/Admin/js/tentac-forms.js"></script>
+}

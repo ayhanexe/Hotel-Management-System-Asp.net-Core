@@ -1,0 +1,104 @@
+﻿@model List<UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<input type="text" id="filter-input" placeholder="Search" class="form-control my-3 w-50" />
+
+<a asp-controller="User" asp-action="InsertDummyData">Insert Dummy Data</a>
+
+<table id="user-table" class="table table-stripped table-dark">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>FullName</th>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in @Model)
+        {
+            <tr>
+                <td class="id">@user.Id</td>
+                <td class="fullName">@user.FullName</td>
+                <td class="userName">@user.UserName</td>
+                <td class="email">@user.Email</td>
+                <td class="role">@user.Role</td>
+                <td class="status">@(user.isBlocked == true ? "Blocked" : "Active")</td>
+                <td>
+                    <a class="btn btn-sm btn-primary m-1" asp-controller="User" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                    <form asp-controller="User" asp-action="@(user.isBlocked == true ? "ActivateUser" : "BlockUser")" asp-route-id="@user.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-@(user.isBlocked == true ? "success" : "warning") m-1">@(user.isBlocked == true ? "Activate" : "Deactivate")</button>
+                    </form>
+                    <button data-id="@user.Id" class="delete btn btn-sm btn-danger m-1">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+
+        $(".delete").on("click", async function(){
+            var id = $(this).data("id");
+            var row = $(this).parents("tr");
+
+            await swal.fire({
+                icon:"error",
+                title: "Are you sure?",
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    $.ajax({
+                        url:`${window.location.href}/Delete/${id}`,
+                        method:"POST",
+                        success: async function(response){
+                            $(row).remove();
+                            await swal.fire({
+                                icon:"success",
+                                title: "Successfully Deleted!"
+                            })
+                        }
+                    })
+                }
+            })
+
+        })
+
+        $("#filter-input").on("change keydown keyup", function(e) {
+            const value = e.target.value;
+            const table = $("#user-table tbody")
+            const children = $(table).children()
+
+            $(children).map((index, item) => {
+                const id = $(item).children("td.id").text()
+                const fullName = $(item).children("td.fullName").text()
+                const userName = $(item).children("td.userName").text()
+                const email = $(item).children("td.email").text()
+                const role = $(item).children("td.role").text()
+                const status = $(item).children("td.status").text()
+
+                const finalText = `${id}${fullName}${userName}${email}${role}${status}`
+
+                try {
+                    if(finalText.search(value) < 0) {
+                        $(item).addClass("d-none")
+                    } else {
+                        $(item).removeClass("d-none")
+                    }
+                }
+                catch(e) {}
+            })
+
+        })
+    })
+</script>
+}

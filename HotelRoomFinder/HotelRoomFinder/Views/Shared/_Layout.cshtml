@@ -1,0 +1,246 @@
+﻿@model HomeIndexViewModel
+
+@functions {
+    bool UserHasValidRole()
+    {
+        if (User.IsInRole(RoleConstants.Admin) ||
+            User.IsInRole(RoleConstants.Moderator) ||
+            User.IsInRole(RoleConstants.Manager))
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="~/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <!-- page title -->
+    <title>Hotel</title>
+    @RenderSection("Styles", false);
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- page wrapper -->
+    <div class="hotel-app">
+        <!-- preloader -->
+        <div class="hotel-preloader-frame">
+            <div class="hotel-preloader imgLoad">
+                <img class="lozad" src="~/img/hotellogo.png" alt="logo" />
+                <div class="hotel-preloader-progress">
+                    <div class="hotel-preloader-bar"></div>
+                </div>
+                <div>
+                    <span class="hotel-preloader-number" data-count="101">0</span>%
+                </div>
+            </div>
+        </div>
+        <!-- preloader end -->
+        <!-- datepicker frame -->
+        <div class="hotel-datepicker-place"></div>
+
+        <!-- top bar -->
+        <div class="hotel-top-bar">
+            <div class="container d-flex justify-content-between">
+                <div class="hotel-left-side">
+                    <!-- logo -->
+                    <a href="~/index.html" class="hotel-logo-frame" style="width: 50px;">
+                        <img src="~/img/@Model?.Header?.Logo" alt="logo">
+                    </a>
+                    <!-- logo end -->
+                </div>
+                <div class="hotel-right-side">
+                    <!-- menu -->
+                    <div class="hotel-menu">
+                        <nav>
+                            <ul>
+                                @foreach (var item in @Model?.HeaderItems)
+                                {
+                                    <li>
+                                        <a asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action">@item.Name</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- menu end -->
+                    <!-- action button -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>
+                            Hi, @User.Identity.Name
+                        </span>
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-primary mx-2">Logout</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="hotel-btn"><img src="~/img/icons/bookmark.svg" alt="icon">Giriş</a>
+                    }
+
+                    @if (UserHasValidRole())
+                    {
+                        <a asp-controller="Dashboard" asp-action="Index" asp-area="Admin" class="btn btn-danger mx-2">Admin Panel</a>
+                    }
+                    @if(User.IsInRole("User"))
+                    {
+                        <a asp-controller="User" asp-action="UserSettings" asp-area="Admin" class="btn btn-warning mx-2">Settings</a>
+                    }
+                    <!-- action button end -->
+                </div>
+                <!-- menu button -->
+                <div class="hotel-menu-btn"><span></span></div>
+                <!-- menu button end -->
+            </div>
+        </div>
+        <!-- top bar end -->
+        @RenderBody()
+
+        <!-- footer -->
+        <footer class="footer-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-logo">
+                            <a href="~/#"><img src="~/img/logo" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-50">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h5>Location</h5>
+                            <div class="widget-text">
+                                <i class="fa fa-map-marker"></i>
+                                <p>@Model?.Footer?.FooterLocation</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h5>Reception</h5>
+                            <div class="widget-text">
+                                <i class="fa fa-phone"></i>
+                                <p>@Model?.Footer?.FooterReceptionTel</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h5>Shuttle Service</h5>
+                            <div class="widget-text">
+                                <i class="fa fa-phone"></i>
+                                <p>@Model?.Footer?.FooterShuttleServiceTel</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h5>Restaurant</h5>
+                            <div class="widget-text">
+                                <i class="fa fa-phone"></i>
+                                <p>@Model?.Footer?.FooterRestaurantTel</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end -->
+        <!-- popup -->
+        <div id="hotel-success" class="hotel-popup imgLoad">
+            <img class="lozad" data-src="~/img/features/12.svg"
+                 alt="success"
+                 class="hotel-succes-icon" />
+            <h2 class="hotel-mb-20">Uğurlu</h2>
+            <p>
+                Ancaq mesaj göndərilməyib. <br />Bu pop-up nümayiş üçün
+                mövcuddur.
+            </p>
+        </div>
+        <!-- popup end -->
+        <!-- popup -->
+        <div class="hotel-popup-frame">
+            <div class="hotel-book-form hotel-book-popup">
+                <span class="hotel-close-popup">+</span>
+                <h2 class="hotel-mb-40">Giriş</h2>
+                <form>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="hotel-input-frame">
+                                <label>Istifadəçi adı</label>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="hotel-input-frame">
+                                <label class="hotel-add-icon">Şifrə</label>
+                                <input type="password" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 hotel-center imgLoad">
+                            <button type="submit" class="hotel-btn">
+                                <img class="lozad" data-src="~/img/icons/search.svg"
+                                     class="hotel-zoom"
+                                     alt="icon" />Giriş
+                            </button>
+                            <button type="submit" class="hotel-btn">
+                                <a href="~/#"><img class="lozad" data-src="~/img/icons/search.svg" class="hotel-zoom" alt="icon" />Qeydiyyat</a>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- popup end -->
+
+
+
+
+
+
+    </div>
+    <!-- page wrapper end -->
+    <!-- jquery js -->
+    <script src="~/js/plugins/jquery.min.js"></script>
+    <script src="~/js/plugins/lozad.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+    <script>
+        const observer = lozad();
+        observer.observe();
+    </script>
+    <!-- bootstrap js -->
+    <script src="~/js/plugins/bootstrap.min.js"></script>
+    <!-- nice select js -->
+
+    <script src="~/js/plugins/jquery.nice-select.min.js"></script>
+    <!-- datepicker js -->
+    <script src="~/js/plugins/datepicker.js"></script>
+    <!-- smooth scroll js -->
+    <script src="~/js/plugins/smooth-scroll.js"></script>
+    <!-- isotope js -->
+    <script src="~/js/plugins/isotope.min.js"></script>
+    <!-- mapbox js -->
+    <script src="~/js/plugins/mapbox.min.js"></script>
+    <!-- fancybox js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.2.1/lightgallery.min.js"></script>
+    <script src="~/js/plugins/fancybox.min.js"></script>
+    <!-- swiper js -->
+    <script src="~/js/plugins/swiper.min.js"></script>
+    <!-- sticky js -->
+    <script src="~/js/plugins/sticky.js"></script>
+    <!-- kinsley js -->
+    <script src="~/js/main.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

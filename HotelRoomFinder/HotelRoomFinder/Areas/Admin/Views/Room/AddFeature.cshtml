@@ -1,0 +1,86 @@
+﻿@model AddFeatureViewModel
+@{
+    ViewData["Title"] = "AddFeature";
+}
+
+<h1>Add Feature To @Model.Room.Name</h1>
+
+<div class="d-flex flex-wrap gap-5">
+    @foreach (var feature in @Model.Features)
+    {
+        var f = Model.Room.Features.Find(f => f.FeatureId == feature.Id && !f.IsDeleted);
+        @if (f != null)
+        {
+
+            <div data-base-feature-id="@f.Id" data-room-id="@Model.Room.Id" data-feature-id="@feature.Id" class="feature-item d-flex flex-column">
+                <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                <p class="text-center">@feature.Name</p>
+                <div class="d-flex flex-column">
+                    <button type="button" class="remove-feature btn btn-danger btn-sm">Remove</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div data-room-id="@Model.Room.Id" data-feature-id="@feature.Id" class="feature-item d-flex flex-column">
+                <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                <p class="text-center">@feature.Name</p>
+                <div class="d-flex flex-column">
+                    <button type="button" class="add-feature btn btn-primary btn-sm">Add</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<a asp-controller="Hotel" asp-action="Index" class="btn btn-primary my-4">END</a>
+
+@section Scripts {
+<script>
+    $(".add-feature").on("click", async function() {
+        var button = $(this);
+        var featureId = $(this).closest(".feature-item").data("feature-id");
+        var roomId = $(this).closest(".feature-item").data("room-id");
+
+        $(button).html(`
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                `);
+        $.ajax({
+                url: `/Admin/Room/AddFeature/${featureId}`,
+                method: "post",
+                data: {
+                    roomId
+                },
+                success: function(response) {
+                    window.location.reload();
+                }
+        })
+    })
+
+    $(".remove-feature").on("click", async function() {
+        var button = $(this);
+        var featureId = $(this).closest(".feature-item").data("base-feature-id");
+
+        $(button).html(`
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                `);
+        $.ajax({
+                url: `/Admin/Room/RemoveFeature/${featureId}`,
+                method: "post",
+                success: function(response) {
+                    $(button).html(`
+                    Add
+                    `)
+                    .removeClass("remove-feature")
+                    .removeClass("btn-danger")
+                    .addClass("add-feature")
+                    .addClass("btn-primary")
+                }
+                })
+    })
+</script>
+}

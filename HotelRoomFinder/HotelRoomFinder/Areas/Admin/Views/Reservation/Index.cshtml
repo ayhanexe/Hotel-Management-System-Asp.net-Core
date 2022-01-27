@@ -1,0 +1,66 @@
+﻿@model ReservationViewModel
+
+<table class="table table-stripped table-dark">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Room</th>
+            <th>User</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model.Reservations)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Room.Name</td>
+                <td>@item.User.Email</td>
+                <td>@item.CheckInDate</td>
+                <td>@item.CheckOutDate</td>
+                <td>
+                    <a asp-controller="Reservation" asp-action="EditReservation" asp-route-id="@item.Id">
+                        <button class="btn btn-primary btn-sm">Edit</button>
+                    </a>
+                    <button data-id="@item.Id" class="btn btn-danger btn-sm delete-button">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+
+        $(".delete-button").on("click", async function(){
+            const id = $(this).data("id");
+            const row = $(this).parents("tr");
+
+            await swal.fire({
+                icon:"error",
+                title: "Are you sure?",
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    $.ajax({
+                        url:`/Admin/Reservation/DeleteReservation/${id}`,
+                        method:"POST",
+                        success: async function(response){
+                            $(row).remove();
+                            await swal.fire({
+                                icon:"success",
+                                title: "Successfully Deleted!"
+                            })
+                        }
+                    })
+                }
+            })
+
+        })
+    })
+</script>
+}

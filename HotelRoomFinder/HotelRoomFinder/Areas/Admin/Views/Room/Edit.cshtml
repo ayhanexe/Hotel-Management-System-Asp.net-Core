@@ -1,0 +1,182 @@
+﻿@model RoomSelfViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="d-flex flex-column">
+    @{
+        var _photo = @Model.BaseRoomData?.Photos;
+    }
+    <form asp-controller="Room" asp-action="UpdateRoom" asp-route-id="@Model.BaseRoomData.Id" method="post" enctype="multipart/form-data">
+        <h1>@Model.BaseRoomData.Name</h1>
+        @if (_photo.Count != 0)
+        {
+            <img class="rounded-3" src="~/img/@_photo[0].Photo" style="width:100%; height:200px; object-fit:cover; object-position:center;" />
+        }
+        <div class="d-flex flex-column my-3">
+            <h3>Room Photos</h3>
+            <div class="d-flex flex-wrap gap-3 ">
+                @foreach (var photo in @Model.BaseRoomData.Photos)
+                {
+                    <div class="d-flex flex-column">
+                        <img src="~/img/@photo?.Photo" style="width:150px; height:150px; object-fit:cover; object-position:center;" class="rounded-3" />
+                        <button type="button" data-photo-id="@photo.Id" data-room-id="@Model.BaseRoomData.Id" class="remove-photo btn btn-danger btn-sm mt-1 mb-3">Delete Photo</button>
+                    </div>
+                }
+            </div>
+            <label asp-for="Photos">Add Photos</label>
+            <input asp-for="Photos" class="form-control" />
+
+            <div class="form-group mt-3">
+                <label asp-for="Name">Rome Name</label>
+                <input value="@Model.BaseRoomData.Name" class="form-control" asp-for="Name" placeholder="Room Name" />
+                @Html.ValidationMessage("Name")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="Title">Rome Title</label>
+                <input value="@Model.BaseRoomData.Title" class="form-control" asp-for="Title" placeholder="Room Title" />
+                @Html.ValidationMessage("Title")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="Description">Rome Description</label>
+                <input value="@Model.BaseRoomData.Description" class="form-control" asp-for="Description" placeholder="Room Description" />
+                @Html.ValidationMessage("Description")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="AdultBedCount">Adult Bed Count</label>
+                <input value="@Model.BaseRoomData.AdultBedCount" class="form-control" asp-for="AdultBedCount" placeholder="Adult Bed Count" />
+                @Html.ValidationMessage("AdultBedCount")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="KidBedCount">Kid Bed Count</label>
+                <input value="@Model.BaseRoomData.KidBedCount" class="form-control" asp-for="KidBedCount" placeholder="Kid Bed Count" />
+                @Html.ValidationMessage("KidBedCount")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="Count">Room Count</label>
+                <input value="@Model.BaseRoomData.Count" class="form-control" asp-for="Count" placeholder="Room Count" />
+                @Html.ValidationMessage("Count")
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="RoomWidth">Room Width</label>
+                <input value="@Model.BaseRoomData.RoomWidth" class="form-control" asp-for="RoomWidth" placeholder="Room Width" />
+                @Html.ValidationMessage("RoomWidth")
+            </div>
+
+            <div class="form-group mt-3">
+                <label asp-for="NightlyPrice">Nightly Price</label>
+                <input value="@Model.BaseRoomData.NightlyPrice" class="form-control" asp-for="NightlyPrice" placeholder="Nightly Price" />
+                @Html.ValidationMessage("NightlyPrice")
+            </div>
+
+            <div class="d-flex flex-wrap gap-5">
+                @foreach (var feature in @Model.Features)
+                {
+                    var f = Model.BaseRoomData.Features.Find(f => f.FeatureId == feature.Id && !f.IsDeleted);
+
+                    if (f != null)
+                    {
+                        <div data-base-feature-id="@f.Id" class="feature-item d-flex flex-column">
+                            <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                            <p class="text-center">@feature.Name</p>
+                            <div class="d-flex flex-column">
+                                <button type="button" class="remove-feature btn btn-danger btn-sm">Remove</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div data-feature-id="@feature.Id" data-room-id="@Model.BaseRoomData.Id" class="feature-item d-flex flex-column">
+                            <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                            <p class="text-center">@feature.Name</p>
+                            <div class="d-flex flex-column">
+                                <button type="button" class="add-feature btn btn-primary btn-sm">Add</button>
+                            </div>
+                        </div>
+                    }
+
+
+                }
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-5">SAVE</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+<script>
+    $(document).ready(function() {
+        $(".add-feature").on("click", async function() {
+            var button = $(this);
+            var featureId = $(this).closest(".feature-item").data("feature-id");
+            var roomId = $(this).closest(".feature-item").data("room-id");
+
+            $(button).html(`
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    `);
+            $.ajax({
+                    url: `/Admin/Room/AddFeature/${featureId}`,
+                    method: "post",
+                    data: {
+                        roomId
+                    },
+                    success: function(response) {
+                        window.location.reload();
+                    }
+            })
+        })
+
+        $(".remove-feature").on("click", async function() {
+            var button = $(this);
+            var featureId = $(this).closest(".feature-item").data("base-feature-id");
+
+            $(button).html(`
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    `);
+            $.ajax({
+                    url: `/Admin/Room/RemoveFeature/${featureId}`,
+                    method: "post",
+                    success: function(response) {
+                        window.location.reload();
+                    }
+                    })
+        })
+
+        $(".remove-photo").on("click", async function() {
+            const id = $(this).data("photo-id")
+            const roomId = $(this).data("room-id")
+        const row = $(this).parents("tr");
+
+
+            await swal.fire({
+                icon:"error",
+                title: "Are you sure?",
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+            }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url:`/Admin/Room/RemovePhoto/${id}`,
+                            method:"POST",
+                            data: {
+                                roomId: roomId
+                            },
+                            success: async function(response){
+                                $(row).remove();
+                                await swal.fire({
+                                    icon:"success",
+                                    title: "Successfully Deleted!"
+                                });
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+        })
+    });
+</script>
+}

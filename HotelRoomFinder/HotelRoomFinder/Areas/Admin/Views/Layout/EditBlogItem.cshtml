@@ -1,0 +1,41 @@
+﻿@model LayoutBlogItemViewModel
+
+<form asp-controller="Layout" asp-action="EditBlogItem" asp-route-id="@Model.Id" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Title">Blog Item Title</label>
+        <input class="form-control" asp-for="Title" placeholder="Blog Item Title" />
+        <span class="text-danger" asp-validation-for="Title"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Text">Blog Item Text</label>
+        <input class="form-control" asp-for="Text" placeholder="Blog Item Text" />
+        <span class="text-danger" asp-validation-for="Text"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ButtonText">Blog Item Button Text</label>
+        <input class="form-control" asp-for="ButtonText" placeholder="Blog Item Button Text" />
+        <span class="text-danger" asp-validation-for="ButtonText"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Area">Blog Item Button Url Area</label>
+        <input class="form-control" asp-for="Area" placeholder="Blog Item Button Url Area" />
+        <span class="text-danger" asp-validation-for="Area"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Controller">Blog Item Button Url Controller</label>
+        <input class="form-control" asp-for="Controller" placeholder="Blog Item Button Url Controller" />
+        <span class="text-danger" asp-validation-for="Controller"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Action">Blog Item Button Url Action</label>
+        <input class="form-control" asp-for="Action" placeholder="Blog Item Button Url Action" />
+        <span class="text-danger" asp-validation-for="Action"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Image">Blog Item Image</label>
+        <input class="form-control" asp-for="Image" placeholder="Blog Item Image" />
+        <span class="text-danger" asp-validation-for="Image"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>

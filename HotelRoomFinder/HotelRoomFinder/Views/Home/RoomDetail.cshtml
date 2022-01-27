@@ -1,0 +1,300 @@
+﻿@model HomeIndexViewModel
+
+<!-- banner -->
+<section class="hotel-banner-simple hotel-transition-bottom">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="hotel-center hotel-title-frame">
+                    <h1 class="hotel-mb-20 hotel-h1-inner">@Model?.room?.Name</h1>
+                    <ul class="hotel-breadcrumbs">
+                        <li><a href="index.html">Ana Səhifə</a></li>
+                        <li><a href="rooms.html">Otaqlar</a></li>
+                        <li><span>@Model?.room?.Description</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- banner end -->
+<!-- room -->
+<div class="hotel-p-100-100">
+    <div class="container">
+        <div class="row" data-sticky-container>
+            <div class="col-lg-8">
+
+                <div class="hotel-room-detail-slider-frame hotel-mb-60">
+                    <div class="swiper-container hotel-rd-slider-2 hotel-mb-10">
+                        <div class="swiper-wrapper">
+                            @foreach (var slide in @Model.room.Photos)
+                            {
+                                <div class="swiper-slide">
+                                    <a data-fancybox="gallery" href="~/img/@slide.Photo" class="hotel-room-detail-photo-lg" data-swiper-parallax="-80" data-swiper-parallax-scale="1.2" data-swiper-parallax-duration="400">
+                                        <img src="~/img/@slide.Photo" alt="room">
+                                        <span class="hotel-zoom"><i class="fas fa-search-plus"></i></span>
+                                    </a>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+                    <div class="swiper-container hotel-rd-slider-1">
+                        <div class="swiper-wrapper">
+                            @foreach (var slide in @Model.room.Photos)
+                            {
+                                <div class="swiper-slide">
+                                    <div class="hotel-room-detail-photo-sm">
+                                        <img src="/img/@slide.Photo" alt="room">
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- description -->
+                <section class="hotel-mb-60 hotel-scroll-animation">
+                    <h3 class="hotel-mb-40">@Model.room.Name</h3>
+                    <p>
+                        @Model.room.Description
+                    </p>
+                </section>
+                <!-- description end -->
+                <!-- features -->
+                <section class="hotel-mb-60">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="hotel-mb-40 hotel-scroll-animation">Otağa daxildir</h3>
+                        </div>
+                        @foreach (var feature in @Model.room.Features)
+                        {
+                            <div class="col-6 col-md-3">
+
+                                <!-- icon box -->
+                            <div class="hotel-icon-box hotel-icon-box-sm hotel-scroll-animation">
+                                    <img src="~/img/features/@feature.Feature.Icon" alt="icon" class="hotel-mb-10">
+                                    <h5>@feature.Feature.Name</h5>
+                                </div>
+                                <!-- icon box end -->
+
+                        </div>
+                        }
+                    </div>
+                </section>
+                <!-- features end -->
+                <!-- services -->
+                <section class="hotel-mb-30">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="hotel-mb-40 hotel-scroll-animation">Otağa Daxildir</h3>
+                        </div>
+                        <div class="col-lg-4">
+
+                            <!-- service card -->
+                            <div class="hotel-ath-card hotel-scroll-animation">
+                                <div class="hotel-cover-frame">
+                                    <img src="~/img/services/4.jpg" alt="cover">
+                                </div>
+                                <div class="hotel-card-description">
+                                    <h5>Oyun Otağı</h5>
+                                </div>
+                            </div>
+                            <!-- service card end -->
+
+                        </div>
+                        <div class="col-lg-4">
+
+                            <!-- service card -->
+                            <div class="hotel-ath-card hotel-scroll-animation">
+                                <div class="hotel-cover-frame">
+                                    <img src="~/img/services/2.jpg" alt="cover">
+                                </div>
+                                <div class="hotel-card-description">
+                                    <h5>Hovuz</h5>
+                                </div>
+                            </div>
+                            <!-- service card end -->
+
+                        </div>
+                        <div class="col-lg-4">
+
+                            <!-- service card -->
+                            <div class="hotel-ath-card hotel-scroll-animation">
+                                <div class="hotel-cover-frame">
+                                    <img src="~/img/services/3.jpg" alt="cover">
+                                </div>
+                                <div class="hotel-card-description">
+                                    <h5>Restorant</h5>
+                                </div>
+                            </div>
+                            <!-- service card end -->
+
+                        </div>
+                    </div>
+                </section>
+                <!-- services end -->
+                <!-- reviews -->
+                <section class="hotel-mb-30">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="hotel-mb-40 hotel-scroll-animation">Rəylər</h3>
+                        </div>
+                        @foreach (var comment in @Model.room.Comments)
+                        {
+                            <div class="col-lg-12">
+
+                                <div class="hotel-review-card hotel-scroll-animation">
+                                    <div class="hotel-card-header">
+                                        <div class="hotel-name-and-photo">
+                                            <div class="hotel-avatar-frame">
+                                                <img src="~/img/@comment.User.Photo" alt="Avatar">
+                                            </div>
+                                            <div>
+                                                <h5>@comment.User.UserName</h5>
+                                                <span>@comment.CreatedTime</span>
+                                            </div>
+                                        </div>
+                                        <ul class="hotel-stars">
+                                            @for (var i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= @comment.StarCount)
+                                                {
+                                                    <li><i class="fas fa-star" style="color:yellow;"></i></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <blockquote>
+                                        @comment.Text
+                                    </blockquote>
+
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </section>
+                <!-- reviews end -->
+
+                <section>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="hotel-mb-40 hotel-scroll-animation">Rəy Bildirin</h3>
+                        </div>
+                        <div class="col-lg-12">
+                            <form asp-controller="Comment" asp-action="Add" asp-area="Admin" method="post" class="hotel-scroll-animation">
+                                <input asp-for="commentViewModel.RoomId" value="@Model.room.Id" type="hidden"/>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input asp-for="commentViewModel.Name" placeholder="Adınız">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input asp-for="commentViewModel.Email" type="email" placeholder="Email">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <textarea asp-for="commentViewModel.Text" rows="8" placeholder="Şərh"></textarea>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hotel-form-submit-frame">
+                                            <!-- temporary button to show the popup -->
+                                            <button class="hotel-btn" type="submit">Göndər</button>
+                                            <!-- <button class="hotel-btn">Send</button> -->
+                                            <div class="hotel-text-sm">*Şəxsi məlumatlarınızı üçüncü tərəflərə açıqlamayacağımıza söz veririk..</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <div class="col-lg-4">
+                <!-- sidebar -->
+                <div class="hotel-sticky hotel-stycky-right" data-margin-top="100">
+
+                    <!-- room info -->
+                    <div class="hotel-room-features-lg hotel-mb-20">
+                        <div class="hotel-feature">
+                            <div class="hotel-icon-frame"><img src="~/img/icons/bed.svg" alt="icon"></div>
+                            <span>@Html.Raw(@Model.room.AdultBedCount + @Model.room.KidBedCount) Nəfərlik</span>
+                        </div>
+                        <div class="hotel-feature">
+                            <div class="hotel-icon-frame"><img src="~/img/icons/square.svg" alt="icon"></div>
+                            <span>@Model.room.RoomWidth Ft²</span>
+                        </div>
+                    </div>
+                    <!-- room info end -->
+
+                    <div class="hotel-price-card hotel-mb-20">
+                        <div class="hotel-price-number">@Model.room.NightlyPrice$</div>
+                        <div class="hotel-btn">Rezervasiya</div>
+                    </div>
+
+                    <div class="hotel-book-form">
+                        <form asp-controller="Room" asp-action="Reserve" asp-area="Admin" asp-route-id="@Model.room.Id" method="post">
+                            <input type="hidden" asp-for="reserve.UserId" value="@Model.user.Id" />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="hotel-input-frame">
+                                        <label for="check-in">Giriş</label>
+                                        @Html.EditorFor(model => model.reserve.CheckIn,
+                                        new {
+                                        htmlAttributes = new {
+                                        @type="text",
+                                        @class = "form-control datepicker-here" } })
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="hotel-input-frame">
+                                        <label for="check-out" class="hotel-add-icon">Çıxış</label>
+                                        @Html.EditorFor(model => model.reserve.CheckOut,
+                                        new {
+                                        htmlAttributes = new {
+                                        @type="text",
+                                        @class = "form-control datepicker-here" } })
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="hotel-select-frame">
+                                        <label for="person">Böyük</label>
+                                        <select id="person" asp-for="reserve.AdultBedCount">
+                                            @for (var i = 1; i <= @Model.room.AdultBedCount; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="hotel-select-frame">
+                                        <label for="children">Uşaq</label>
+                                        <select id="children" asp-for="reserve.KidBedCount">
+                                            @for (var i = 1; i <= @Model.room.KidBedCount; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 hotel-center">
+                                    <button type="submit" class="hotel-btn"><img src="~/img/icons/search.svg" class="hotel-zoom" alt="icon">Bron Et</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- sidebar end -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- room end -->

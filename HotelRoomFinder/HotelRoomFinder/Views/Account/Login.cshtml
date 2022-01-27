@@ -1,0 +1,137 @@
+﻿@model AccountRegisterAndLoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qeydiyyat</title>
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body>
+
+    <div class="hotel-app">
+
+        <!-- preloader -->
+        <div class="hotel-preloader-frame">
+            <div class="hotel-preloader imgLoad">
+                <img class="lozad" src="~/img/hotellogo.png" alt="logo" />
+                <div class="hotel-preloader-progress">
+                    <div class="hotel-preloader-bar"></div>
+                </div>
+                <div>
+                    <span class="hotel-preloader-number" data-count="101">0</span>%
+                </div>
+            </div>
+        </div>
+        <!-- preloader end -->
+
+
+        <section class="login">
+            <div class="container">
+                <div class="user signinBox">
+                    <div class="imgBox"><img src="~/img/1.jpg" alt=""></div>
+                    <div class="formBox">
+                        <form asp-controller="Account" asp-action="Login" method="post">
+                            <h2>Giriş</h2>
+                            @if (ViewContext.ViewData.ModelState.Where(x => x.Key == "").Any())
+                            {
+                                @Html.ValidationSummary(true, null, new { @class = "text-danger" })
+                            }
+
+                            <input asp-for="LoginModel.Username" type="text" placeholder="İstifadəçi adı">
+                            <span class="text-danger" asp-validation-for="LoginModel.Username"></span>
+
+                            <input asp-for="LoginModel.Password" type="password" placeholder="Şifrə">
+                            <span class="text-danger" asp-validation-for="LoginModel.Password"></span>
+
+                            <input type="submit" value="Giriş">
+                            <p class="signup">Hesabınız yoxdur? O zaman <a href="#" onclick="toggleForm();">Qedyiyyatdan keçin</a></p>
+                        </form>
+                    </div>
+                </div>
+                <div class="user signupBox">
+                    <div class="formBox">
+                        <form asp-controller="Account" asp-action="Register" method="post">
+                            <h2>Hesab aç</h2>
+                            @if (ViewContext.ViewData.ModelState.Where(x => x.Key == "").Any())
+                            {
+                                @Html.ValidationSummary(true, null, new { @class = "text-danger" })
+                            }
+                            <input asp-for="RegisterModel.Username" type="text" placeholder="İstifadəçi Adınız">
+                            <span class="text-danger" asp-validation-for="RegisterModel.Username"></span>
+
+                            <input asp-for="RegisterModel.Email" type="text" placeholder="E-mail Adresiniz">
+                            <span class="text-danger" asp-validation-for="RegisterModel.Email"></span>
+
+                            <input asp-for="RegisterModel.Password" type="password" placeholder="Şifrə">
+                            <span class="text-danger" asp-validation-for="RegisterModel.Password"></span>
+
+                            <input asp-for="RegisterModel.PasswordAgain" type="password" placeholder="Şifrə (təkrar)">
+                            <span class="text-danger" asp-validation-for="RegisterModel.PasswordAgain"></span>
+
+                            <input type="submit" value="Qeydiyyatdan keç">
+                            <p class="signup">Giriş ekranına <a href="#" onclick="toggleForm();">geri qayıt</a></p>
+                        </form>
+                    </div>
+                    <div class="imgBox"><img src="~/img/rooms/1.jpg" alt=""></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+
+
+        function toggleForm(){
+        section = document.querySelector('section');
+        container = document.querySelector('.container');
+        container.classList.toggle('active');
+        section.classList.toggle('active');
+        }
+
+
+    </script>
+    <script src="~/js/plugins/jquery.min.js"></script>
+    <script src="~/js/plugins/lozad.js"></script>
+    <script src="~/https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+    <script>
+        const observer = lozad();
+        observer.observe();
+    </script>
+    <!-- bootstrap js -->
+    <script src="~/js/plugins/bootstrap.min.js"></script>
+    <!-- nice select js -->
+
+    <script src="~/js/plugins/jquery.nice-select.min.js"></script>
+    <!-- datepicker js -->
+    <script src="~/js/plugins/datepicker.js"></script>
+    <!-- smooth scroll js -->
+    <script src="~/js/plugins/smooth-scroll.js"></script>
+    <!-- isotope js -->
+    <script src="~/js/plugins/isotope.min.js"></script>
+    <!-- mapbox js -->
+    <script src="~/js/plugins/mapbox.min.js"></script>
+    <!-- fancybox js -->
+    <script src="~/https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.2.1/lightgallery.min.js"></script>
+    <script src="~/js/plugins/fancybox.min.js"></script>
+    <!-- swiper js -->
+    <script src="~/js/plugins/swiper.min.js"></script>
+    <!-- sticky js -->
+    <script src="~/js/plugins/sticky.js"></script>
+    <!-- kinsley js -->
+    <script src="~/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+﻿@model LayoutViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="mb-5">Layout Editor</h1>
+
+<h3 class="mt-2">Header</h3>
+<img src="~/img/@Model.BaseHeader.Logo" style="width:100px; height:100px; object-fit:cover; object-position:center;" />
+<form asp-controller="Layout" asp-action="UpdateHeader" enctype="multipart/form-data">
+    <div class="d-flex flex-column">
+        <label asp-for="Header.File">Header Logo</label>
+        <input accept="image/*" class="form-control" asp-for="Header.File" />
+        @Html.ValidationMessage("HeaderLogoFile", new {
+        @class = "text-danger"
+        })
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>
+
+@if (Model.HeaderItems.Count > 0)
+{
+    <h3 class="mt-5">Header Items</h3>
+    <table class="table table-stripped table-dark">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Text</th>
+                <th>Controller</th>
+                <th>Action</th>
+                <th>Area</th>
+                <th>Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var headerItem in @Model.HeaderItems)
+            {
+                <tr>
+                    <td>@headerItem.Id</td>
+                    <td>@headerItem.Name</td>
+                    <td>@headerItem.Controller</td>
+                    <td>@headerItem.Action</td>
+                    <td>@headerItem.Area</td>
+                    <td>
+                        <a asp-controller="Layout" asp-action="EditHeaderItem" asp-route-id="@headerItem.Id">
+                            <button class="btn btn-primary">Edit</button>
+                        </a>
+                        <button data-header-item-id="@headerItem.Id" class="delete-header-item btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+<h3 class="mt-5">Add a header item</h3>
+<partial name="_HeaderItemAddForm" model="@Model" />
+
+<h3 class="mt-5">Edit Main Slider</h3>
+<form asp-controller="Layout" asp-action="UpdateMainSlider" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.MainSliderTitle">Main Slider Title</label>
+        <input class="form-control" asp-for="Layout.MainSliderTitle" value="@Model.Layout.MainSliderTitle" placeholder="Main Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.MainSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.MainSliderDesc">Main Slider Description</label>
+        <input class="form-control" asp-for="Layout.MainSliderDesc" value="@Model.Layout.MainSliderDesc" placeholder="Main Slider Description" />
+        <span class="text-danger" asp-validation-for="Layout.MainSliderDesc"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.MainSliderImage" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+    <div class="form-group">
+        <label asp-for="Layout.MainSliderImage">Main Slider Image</label>
+        <input class="form-control" asp-for="Layout.MainSliderImage" />
+        <span class="text-danger" asp-validation-for="Layout.MainSliderImage"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+<h3 class="mt-5">Edit Blog Items Section</h3>
+@if (@Model.LayoutBlogItems.Count > 0)
+{
+    <table class="table table-stripped table-dark">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Button Text</th>
+                <th>Button Url</th>
+                <th>Action Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var blogItem in @Model.LayoutBlogItems)
+            {
+                <tr>
+                    <td>@blogItem.Id</td>
+                    <td>
+                        <img src="~/img/@blogItem.Image" style="width:150px; height:150px;" />
+                    </td>
+                    <td>@blogItem.Title</td>
+                    <td>@blogItem.Text</td>
+                    <td>@blogItem.ButtonText</td>
+                    <td>@blogItem.Area/@blogItem.Controller/@blogItem.Action</td>
+                    <td>
+                        <a asp-controller="Layout" asp-action="EditBlogItem" asp-route-id="@blogItem.Id">
+                            <button class="btn btn-primary">Edit</button>
+                        </a>
+                        <button data-blog-item-id="@blogItem.Id" class="delete-blog-item btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<form asp-controller="Layout" asp-action="AddBlogItem" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Title">Blog Item Title</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Title" placeholder="Blog Item Title" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Title"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Text">Blog Item Text</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Text" placeholder="Blog Item Text" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Text"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.ButtonText">Blog Item Button Text</label>
+        <input class="form-control" asp-for="LayoutBlogItem.ButtonText" placeholder="Blog Item Button Text" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.ButtonText"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Area">Blog Item Button Url Area</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Area" placeholder="Blog Item Button Url Area" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Area"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Controller">Blog Item Button Url Controller</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Controller" placeholder="Blog Item Button Url Controller" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Controller"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Action">Blog Item Button Url Action</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Action" placeholder="Blog Item Button Url Action" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Action"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LayoutBlogItem.Image">Blog Item Image</label>
+        <input class="form-control" asp-for="LayoutBlogItem.Image" placeholder="Blog Item Image" />
+        <span class="text-danger" asp-validation-for="LayoutBlogItem.Image"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">Edit Room Image Slider Section</h3>
+
+<form asp-controller="Layout" asp-action="EditRoomImageSlider" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.RoomImageSliderTitle">Room Image Slider Title</label>
+        <input value="@Model.Layout.RoomImageSliderTitle" class="form-control" asp-for="Layout.RoomImageSliderTitle" placeholder="Room Image Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.RoomImageSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.RoomImageSliderDesc">Room Image Slider Description</label>
+        <input value="@Model.Layout.RoomImageSliderDesc" class="form-control" asp-for="Layout.RoomImageSliderDesc" placeholder="Room Image Slider Description" />
+        <span class="text-danger" asp-validation-for="Layout.RoomImageSliderDesc"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">Edit Room Slider Section</h3>
+<form asp-controller="Layout" asp-action="EditRoomSlider" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.RoomSliderTitle">Room Slider Title</label>
+        <input value="@Model.Layout.RoomSliderTitle" class="form-control" asp-for="Layout.RoomSliderTitle" placeholder="Room Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.RoomSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.RoomSliderDesc">Room Slider Description</label>
+        <input value="@Model.Layout.RoomSliderDesc" class="form-control" asp-for="Layout.RoomSliderDesc" placeholder="Room Slider Description" />
+        <span class="text-danger" asp-validation-for="Layout.RoomSliderDesc"></span>
+    </div>
+    <button type="submit" class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">Edit Comment Slider Section</h3>
+<form asp-controller="Layout" asp-action="EditCommentSlider" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.CommentSliderTitle">Comment Slider Title</label>
+        <input value="@Model.Layout.CommentSliderTitle" class="form-control" asp-for="Layout.CommentSliderTitle" placeholder="Comment Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.CommentSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.CommentSliderDesc">Comment Slider Description</label>
+        <input value="@Model.Layout.CommentSliderDesc" class="form-control" asp-for="Layout.CommentSliderDesc" placeholder="Comment Slider Description" />
+        <span class="text-danger" asp-validation-for="Layout.CommentSliderDesc"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+<h3 class="mt-5">Select Layout Features</h3>
+
+<div class="d-flex flex-wrap gap-5">
+    @foreach (var feature in @Model.Features)
+    {
+
+        var f = Model.LayoutFeatures.Find(f => f.FeatureId == feature.Id && !f.IsDeleted);
+
+        @if (f != null)
+        {
+
+            <div data-base-feature-id="@f.Id" data-feature-id="@feature.Id" class="feature-item d-flex flex-column">
+                <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                <p class="text-center">@feature.Name</p>
+                <div class="d-flex flex-column">
+                    <button class="remove-feature btn btn-danger btn-sm">Remove</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div data-feature-id="@feature.Id" class="feature-item d-flex flex-column">
+                <img src="~/img/features/@feature.Icon" style="width:150px; height:150px;" />
+                <p class="text-center">@feature.Name</p>
+                <div class="d-flex flex-column">
+                    <button class="add-feature btn btn-primary btn-sm">Add</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
+<h3 class="mt-5">Edit Footer</h3>
+<form asp-controller="Layout" asp-action="EditFooter" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Footer.FooterLocation">Footer Location</label>
+        <input value="@Model.Footer.FooterLocation" class="form-control" asp-for="Footer.FooterLocation" placeholder="Footer Location" />
+        <span class="text-danger" asp-validation-for="Footer.FooterLocation"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Footer.FooterReceptionTel">Footer Reception Telephone</label>
+        <input value="@Model.Footer.FooterReceptionTel" class="form-control" asp-for="Footer.FooterReceptionTel" placeholder="Footer Reception Telephone" />
+        <span class="text-danger" asp-validation-for="Footer.FooterReceptionTel"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Footer.FooterShuttleServiceTel">Footer Shuttle Service Telephone</label>
+        <input value="@Model.Footer.FooterShuttleServiceTel" class="form-control" asp-for="Footer.FooterShuttleServiceTel" placeholder="Footer Shuttle Service Telephone" />
+        <span class="text-danger" asp-validation-for="Footer.FooterShuttleServiceTel"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Footer.FooterRestaurantTel">Footer Restaurant Telephone</label>
+        <input value="@Model.Footer.FooterRestaurantTel" class="form-control" asp-for="Footer.FooterRestaurantTel" placeholder="Footer Restaurant Telephone" />
+        <span class="text-danger" asp-validation-for="Footer.FooterRestaurantTel"></span>
+    </div>
+
+
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">About Page Layout</h3>
+<form asp-controller="Layout" asp-action="EditAboutPageLayout" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutBaseSliderTitle">Base Slider Title</label>
+        <input value="@Model?.MainLayout?.AboutBaseSliderTitle" class="form-control" asp-for="Layout.AboutSection.AboutBaseSliderTitle" placeholder="About Page Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutBaseSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutBaseSliderDescription">About Base Slider Description</label>
+        <input value="@Model?.MainLayout?.AboutBaseSliderDescription" class="form-control" asp-for="Layout.AboutSection.AboutBaseSliderDescription" placeholder="About Page Slider Desc" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutBaseSliderDescription"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.AboutBaseSliderPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutBaseSliderPhoto">About Page Slider Photo</label>
+        <input value="@Model?.MainLayout?.AboutBaseSliderPhoto" class="form-control" asp-for="Layout.AboutSection.AboutBaseSliderPhoto" placeholder="About Page Slider Photo" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutBaseSliderPhoto"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutCEOName">About Page Ceo Name</label>
+        <input value="@Model?.MainLayout?.AboutCEOName" class="form-control" asp-for="Layout.AboutSection.AboutCEOName" placeholder="About page Ceo Name" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutCEOName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutCEOText">About Page Ceo Text</label>
+        <input value="@Model?.MainLayout?.AboutCEOText" class="form-control" asp-for="Layout.AboutSection.AboutCEOText" placeholder="About page Ceo Text" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutCEOText"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.AboutCEOPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutCEOPhoto">About Page Ceo Photo</label>
+        <input value="@Model?.MainLayout?.AboutCEOPhoto" class="form-control" asp-for="Layout.AboutSection.AboutCEOPhoto" placeholder="About page Ceo Photo" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutCEOPhoto"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutFeatureTitle">About Page Feature Section Title</label>
+        <input value="@Model?.MainLayout?.AboutFeatureTitle" class="form-control" asp-for="Layout.AboutSection.AboutFeatureTitle" placeholder="About Page Feature Section Title" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutFeatureTitle"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutFeatureDescription">About Page Feature Section Description</label>
+        <input value="@Model?.MainLayout?.AboutFeatureDescription" class="form-control" asp-for="Layout.AboutSection.AboutFeatureDescription" placeholder="About Page Feature Section Description" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutFeatureDescription"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutVideoTitle">About Page Video Section Title</label>
+        <input value="@Model?.MainLayout?.AboutVideoTitle" class="form-control" asp-for="Layout.AboutSection.AboutVideoTitle" placeholder="About Page Video Section Title" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutVideoTitle"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutVideoDescription">About Page Video Section Description</label>
+        <input value="@Model?.MainLayout?.AboutVideoDescription" class="form-control" asp-for="Layout.AboutSection.AboutVideoDescription" placeholder="About Page Video Section Description" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutVideoDescription"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutVideoUrl">About Page Video Section Url</label>
+        <input value="@Model?.MainLayout?.AboutVideoUrl" class="form-control" asp-for="Layout.AboutSection.AboutVideoUrl" placeholder="About Page Video Section Url" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutVideoUrl"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.AboutVideoPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.AboutSection.AboutVideoPhoto">About Page Video Section Photo</label>
+        <input value="@Model?.MainLayout?.AboutVideoPhoto" class="form-control" asp-for="Layout.AboutSection.AboutVideoPhoto" placeholder="About Page Video Section Photo" />
+        <span class="text-danger" asp-validation-for="Layout.AboutSection.AboutVideoPhoto"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">Hotels Page Layout</h3>
+<form asp-controller="Layout" asp-action="EditHotelsPage" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.HotelsMainSlider.MainSliderTitle">Hotels Page Slider Title</label>
+        <input value="@Model?.MainLayout?.HotelSliderTitle" class="form-control" asp-for="Layout.HotelsMainSlider.MainSliderTitle" placeholder="Hotels Page Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.HotelsMainSlider.MainSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.RoomsMainSlider.MainSliderDescription">Hotels Page Slider Description</label>
+        <input value="@Model?.MainLayout?.HotelSliderDescription" class="form-control" asp-for="Layout.HotelsMainSlider.MainSliderDescription" placeholder="Hotels Page Slider Desc" />
+        <span class="text-danger" asp-validation-for="Layout.HotelsMainSlider.MainSliderDescription"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.HotelSliderPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.HotelsMainSlider.MainSliderPhoto">Hotels Page Slider Photo</label>
+        <input value="@Model.Layout?.HotelsMainSlider?.MainSliderPhoto" class="form-control" asp-for="Layout.HotelsMainSlider.MainSliderPhoto" placeholder="Hotels Page Slider Photo" />
+        <span class="text-danger" asp-validation-for="Layout.HotelsMainSlider.MainSliderPhoto"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+<h3 class="mt-5">Rooms Page Layout</h3>
+<form asp-controller="Layout" asp-action="EditRoomsPage" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.RoomsMainSlider.MainSliderTitle">Rooms Page Slider Title</label>
+        <input value="@Model?.MainLayout?.RoomsSliderTitle" class="form-control" asp-for="Layout.RoomsMainSlider.MainSliderTitle" placeholder="Rooms Page Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.RoomsMainSlider.MainSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.RoomsMainSlider.MainSliderDescription">Rooms Page Slider Description</label>
+        <input value="@Model?.MainLayout?.RoomsSliderDescription" class="form-control" asp-for="Layout.RoomsMainSlider.MainSliderDescription" placeholder="Rooms Page Slider Desc" />
+        <span class="text-danger" asp-validation-for="Layout.RoomsMainSlider.MainSliderDescription"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.RoomsSliderPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.RoomsMainSlider.MainSliderPhoto">Rooms Page Slider Photo</label>
+        <input value="@Model.Layout?.RoomsMainSlider?.MainSliderPhoto" class="form-control" asp-for="Layout.RoomsMainSlider.MainSliderPhoto" placeholder="Rooms Page Slider Photo" />
+        <span class="text-danger" asp-validation-for="Layout.RoomsMainSlider.MainSliderPhoto"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+<h3 class="mt-5">Services Page Layout</h3>
+<form asp-controller="Layout" asp-action="EditServicesPage" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.ServicesMainSlider.MainSliderTitle">Services Page Slider Title</label>
+        <input value="@Model?.MainLayout?.ServicesSliderTitle" class="form-control" asp-for="Layout.ServicesMainSlider.MainSliderTitle" placeholder="Services Page Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.ServicesMainSlider.MainSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.ServicesMainSlider.MainSliderDescription">Services Page Slider Description</label>
+        <input value="@Model?.MainLayout?.ServicesSliderDescription" class="form-control" asp-for="Layout.ServicesMainSlider.MainSliderDescription" placeholder="Services Page Slider Desc" />
+        <span class="text-danger" asp-validation-for="Layout.ServicesMainSlider.MainSliderDescription"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.ServicesSliderPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.ServicesMainSlider.MainSliderPhoto">Services Page Slider Photo</label>
+        <input value="@Model.Layout?.ServicesMainSlider?.MainSliderPhoto" class="form-control" asp-for="Layout.ServicesMainSlider.MainSliderPhoto" placeholder="Services Page Slider Photo" />
+        <span class="text-danger" asp-validation-for="Layout.ServicesMainSlider.MainSliderPhoto"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+<h3 class="mt-5">Contact Page Layout</h3>
+<form asp-controller="Layout" asp-action="EditContactPage" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Layout.ContactMainSlider.MainSliderTitle">Contact Page Slider Title</label>
+        <input value="@Model?.MainLayout?.ContactSliderTitle" class="form-control" asp-for="Layout.ContactMainSlider.MainSliderTitle" placeholder="Contact Page Slider Title" />
+        <span class="text-danger" asp-validation-for="Layout.ContactMainSlider.MainSliderTitle"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Layout.ContactMainSlider.MainSliderDescription">Contact Page Slider Description</label>
+        <input value="@Model?.MainLayout?.ContactSliderDescription" class="form-control" asp-for="Layout.ContactMainSlider.MainSliderDescription" placeholder="Contact Page Slider Desc" />
+        <span class="text-danger" asp-validation-for="Layout.ContactMainSlider.MainSliderDescription"></span>
+    </div>
+    <img src="~/img/@Model.MainLayout.ContactSliderPhoto" style="width:150px; height:150px; object-fit:cover; object-position:center;" />
+
+    <div class="form-group">
+        <label asp-for="Layout.ContactMainSlider.MainSliderPhoto">Contact Page Slider Photo</label>
+        <input value="@Model.Layout?.ContactMainSlider?.MainSliderPhoto" class="form-control" asp-for="Layout.ContactMainSlider.MainSliderPhoto" placeholder="Contact Page Slider Photo" />
+        <span class="text-danger" asp-validation-for="Layout.ContactMainSlider.MainSliderPhoto"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">SAVE</button>
+</form>
+
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        $(".delete-blog-item").on("click", async function() {
+        const id = $(this).data("blog-item-id")
+    var row = $(this).parents("tr");
+
+
+    await swal.fire({
+        icon: "error",
+        title: "Are you sure?",
+        confirmButtonText: 'Delete',
+        showCancelButton: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `${window.location.href}/DeleteBlogItem/${id}`,
+                method: "POST",
+                success: async function (response) {
+                    $(row).remove();
+                    await swal.fire({
+                        icon: "success",
+                        title: "Successfully Deleted!"
+                    })
+                }
+            })
+        }
+    })
+    })
+    $(".add-feature").on("click", async function() {
+        var button = $(this);
+        var featureId = $(this).closest(".feature-item").data("feature-id");
+
+        $(button).html(`
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                `);
+        $.ajax({
+                url: `/Admin/Layout/AddFeature/${featureId}`,
+                method: "post",
+                success: function(response) {
+                    window.location.reload();
+                }
+        })
+    })
+
+    $(".remove-feature").on("click", async function() {
+        const button = $(this);
+        const featureId = $(this).closest(".feature-item").data("base-feature-id");
+
+        $(button).html(`
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                `);
+        $.ajax({
+                url: `/Admin/Layout/RemoveFeature/${featureId}`,
+                method: "post",
+                success: function(response) {
+                    window.location.reload();
+                }
+                })
+    })
+    })
+</script>
+}

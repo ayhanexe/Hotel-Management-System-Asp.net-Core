@@ -1,0 +1,71 @@
+﻿@model RoomCreateViewModel
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h1>Add A Room To @Model.Hotel.Name</h1>
+
+<form asp-controller="Room" asp-action="Add" asp-route-id="@Model.Hotel.Id" enctype="multipart/form-data">
+    @Html.ValidationMessage("all", new {
+    @class = "text-danger mb-3"
+    })
+
+    <div class="d-flex flex-column">
+
+        <label asp-for="Room.Name">Room Name</label>
+        <input asp-for="Room.Name" class="form-control mb-2" placeholder="Room Name" />
+        @Html.ValidationMessage("Name", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.Title">Room Title</label>
+        <input asp-for="Room.Title" class="form-control mb-2" placeholder="Room Title" />
+        @Html.ValidationMessage("Title", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.Description">Room Description</label>
+        <input asp-for="Room.Description" class="form-control mb-2" placeholder="Room Description" />
+        @Html.ValidationMessage("Description", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.AdultBedCount">Adult Bed Count</label>
+        <input asp-for="Room.AdultBedCount" class="form-control mb-4" min="0" value="1" placeholder="Adult Bed Count" />
+        @Html.ValidationMessage("AdultBedCount", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.KidBedCount">Kid Bed Count</label>
+        <input asp-for="Room.KidBedCount" class="form-control mb-4" min="0" value="1" placeholder="Kid Bed Count" />
+        @Html.ValidationMessage("KidBedCount", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.RoomWidth">Room Width</label>
+        <input asp-for="Room.RoomWidth" class="form-control mb-4" min="0" placeholder="Room Width" />
+        @Html.ValidationMessage("RoomWidth", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.NightlyPrice">Nightly Price</label>
+        <input asp-for="Room.NightlyPrice" class="form-control mb-4" min="0" placeholder="Nightly Price" />
+        @Html.ValidationMessage("NightlyPrice", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.Photos">Photos</label>
+        <input accept="image/*" asp-for="Room.Photos" id="image-picker" class="form-control mb-4" />
+        @Html.ValidationMessage("Photos", new {
+        @class = "text-danger mb-3"
+        })
+
+        <label asp-for="Room.Count">Room Count</label>
+        <input asp-for="Room.Count" min="1" class="form-control mb-4" />
+        @Html.ValidationMessage("Count", new {
+        @class = "text-danger mb-3"
+        })
+
+        <button type="submit" class="btn btn-primary my-4">ADD</button>
+    </div>
+</form>   

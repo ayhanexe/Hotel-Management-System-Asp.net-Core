@@ -1,0 +1,38 @@
+﻿@model HeaderItem
+@{
+    ViewData["Title"] = "EditHeaderItem";
+}
+
+<h1>Editing @Model.Name</h1>
+<form asp-controller="Layout" asp-action="EditHeaderItem" asp-route-id="@Model.Id" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input class="form-control" asp-for="Name" value="@Model.Name" placeholder="Name"/>
+        @Html.ValidationMessage("Name", new {
+            @class = "text-danger"
+        })
+    </div>
+    <div class="form-group">
+        <label asp-for="Area">Area</label>
+        <input class="form-control" asp-for="Area" value="@Model.Area" placeholder="Area"/>
+        @Html.ValidationMessage("Area", new {
+            @class = "text-danger"
+        })
+    </div>
+    <div class="form-group">
+        <label asp-for="Controller">Controller</label>
+        <input class="form-control" asp-for="Controller" value="@Model.Controller" placeholder="Controller"/>
+        @Html.ValidationMessage("Controller", new {
+            @class = "text-danger"
+        })
+    </div>
+    <div class="form-group">
+        <label asp-for="Action">Action</label>
+        <input class="form-control" asp-for="Action" value="@Model.Action" placeholder="Action"/>
+        @Html.ValidationMessage("Action", new {
+            @class = "text-danger"
+        })
+    </div>
+    <button type="submit" class="btn btn-primary">SAVE</button>
+</form>
+

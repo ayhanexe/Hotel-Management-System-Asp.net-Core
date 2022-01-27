@@ -1,0 +1,15 @@
+﻿@model EditCommentViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Comment For @Model.User.Email</h1>
+
+<form asp-action="EditComment" asp-controller="Comment" asp-route-id="@Model.Id">
+    <div class="form-group d-flex flex-column">
+        <label asp-for="Text">Text</label>
+        <input asp-for="Text" placeholder="Text" class="form-control"/>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+</form>
+

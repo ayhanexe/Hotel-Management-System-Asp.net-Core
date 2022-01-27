@@ -1,0 +1,26 @@
+﻿@model LayoutViewModel
+
+<form asp-controller="Layout" asp-action="AddHeaderItem">
+        <div class="form-group">
+            <label asp-for="HeaderItem.Name">Header Item Text</label>
+            <input class="form-control" asp-for="HeaderItem.Name" placeholder="Header Item Text" />
+            <span class="text-danger" asp-validation-for="HeaderItem.Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HeaderItem.Controller">Header Item Controller</label>
+            <input class="form-control" asp-for="HeaderItem.Controller" placeholder="Header Item Controller" />
+            <span class="text-danger" asp-validation-for="HeaderItem.Controller"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HeaderItem.Action">Header Item Action</label>
+            <input class="form-control" asp-for="HeaderItem.Action" placeholder="Header Item Action" />
+            <span class="text-danger" asp-validation-for="HeaderItem.Action"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HeaderItem.Area">Header Item Area</label>
+            <input class="form-control" asp-for="HeaderItem.Area" placeholder="Header Item Area" />
+            <span class="text-danger" asp-validation-for="HeaderItem.Area"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit">ADD</button>
+    </form>

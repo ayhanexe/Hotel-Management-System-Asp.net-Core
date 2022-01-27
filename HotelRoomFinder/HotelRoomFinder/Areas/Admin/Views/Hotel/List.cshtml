@@ -1,0 +1,82 @@
+﻿@model List<Hotel>
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List Of Hotels</h1>
+@if (@Model.Count() == 0)
+{
+    <h1>No Hotel Found!</h1>
+}
+else
+{
+    <table class="table table-stripped table-dark">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Stars</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hotel in @Model)
+            {
+                <tr>
+                    <td>@hotel.Id</td>
+                    <td>@hotel.User.Email</td>
+                    <td>
+                        <img style="width:150px; height:150px" src="~/img/@hotel.Photo" />
+                    </td>
+                    <td>@hotel.Name</td>
+                    <td>@hotel.Description</td>
+                    <td>@hotel.StarCount</td>
+                    <td>
+                        <a asp-controller="Hotel" asp-action="UpdateHotel" asp-route-id="@hotel.Id" class="btn btn-primary m-2 btn-sm">Update</a>
+                        <a asp-controller="Reservation" asp-action="Index" asp-route-id="@hotel.Id" class="btn btn-secondary btn-sm m-2">Reservations</a>
+                        <a asp-controller="Hotel" asp-action="ViewHotelRooms" asp-route-id="@hotel.Id" class="btn btn-warning m-2 btn-sm">Rooms</a>
+                        <button data-id="@hotel.Id" type="button" class="delete btn btn-danger m-2 btn-sm">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+
+        $(".delete").on("click", async function(){
+            const id = $(this).data("id");
+            const row = $(this).parents("tr");
+
+            await swal.fire({
+                icon:"error",
+                title: "Are you sure?",
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    $.ajax({
+                        url:`/Admin/Hotel/Delete/${id}`,
+                        method:"POST",
+                        success: async function(response){
+                            $(row).remove();
+                            await swal.fire({
+                                icon:"success",
+                                title: "Successfully Deleted!"
+                            })
+                        }
+                    })
+                }
+            })
+
+        })
+    })
+</script>
+}

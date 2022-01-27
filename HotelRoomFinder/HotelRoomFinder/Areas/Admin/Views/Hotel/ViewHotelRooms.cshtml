@@ -1,0 +1,90 @@
+﻿@model Hotel
+@{
+    ViewData["Title"] = "ViewHotelRooms";
+}
+
+<h1>@Model.Name Rooms</h1>
+
+<table class="table table-stripped table-dark">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Count</th>
+            <th>Adult Beds</th>
+            <th>Kid Beds</th>
+            <th>Room Width</th>
+            <th>Features</th>
+            <th>Action Buttons</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model.Rooms)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>
+                    <img src="~/img/@item.Photos[0].Photo" style="width:100px; height:100px;" />
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Count</td>
+                <td>@item.AdultBedCount</td>
+                <td>@item.KidBedCount</td>
+                <td>@item.RoomWidth</td>
+                <td>
+                    @foreach (var feature in @item.Features)
+                    {
+                        <img src="~/img/features/@feature.Feature.Icon" class="m-1" style="width:30px; height:30px; object-fit:cover; object-position:center;" />
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Room" asp-action="Edit" asp-route-id="@item.Id">
+                        <button class="btn btn-primary btn-sm m-1">Edit</button>
+                    </a>
+                    <a asp-controller="Comment" asp-action="List" asp-route-id="@item.Id">
+                        <button class="btn btn-warning btn-sm m-1">Comments</button>
+                    </a>
+                    <button data-id="@item.Id" class="delete-room btn btn-danger btn-sm m-1">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+
+        $(".delete-room").on("click", async function(){
+            const id = $(this).data("id");
+            const row = $(this).parents("tr");
+
+            await swal.fire({
+                icon:"error",
+                title: "Are you sure?",
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    $.ajax({
+                        url:`/Admin/Room/RemoveRoom/${id}`,
+                        method:"POST",
+                        success: async function(response){
+                            $(row).remove();
+                            await swal.fire({
+                                icon:"success",
+                                title: "Successfully Deleted!"
+                            })
+                        }
+                    })
+                }
+            })
+
+        })
+    })
+</script>
+}

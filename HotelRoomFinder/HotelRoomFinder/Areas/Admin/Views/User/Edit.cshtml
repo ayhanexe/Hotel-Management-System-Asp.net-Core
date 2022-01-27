@@ -1,0 +1,60 @@
+﻿@model EditUserViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editing @Model.User.UserName</h1>
+
+<form asp-controller="User" asp-action="Edit" asp-route-id="@Model.User.Id" method="POST">
+    <div class="d-flex flex-column">
+        @if (ViewContext.ViewData.ModelState.Where(x => x.Key == "").Any())
+        {
+            @Html.ValidationSummary(true, null, new { @class = "text-danger" })
+        }
+
+        <input type="hidden" asp-for="User.Id" value="@Model.User.Id" />
+        <label class="mt-4" asp-for="User.FullName">FullName</label>
+        <input asp-for="User.FullName" class="form-control my-2" value="@Model.User.FullName" placeholder="FullName" />
+        <span asp-validation-for="User.FullName"></span>
+
+        <label class="mt-4" asp-for="User.Email">Email</label>
+        <input asp-for="User.Email" class="form-control my-2" value="@Model.User.Email" placeholder="Email" />
+        <span asp-validation-for="User.Email"></span>
+
+        <label class="mt-4" asp-for="User.UserName">UserName</label>
+        <input asp-for="User.UserName" class="form-control my-2" value="@Model.User.UserName" placeholder="UserName" />
+        <span asp-validation-for="User.UserName"></span>
+
+
+        <div class="my-2 d-flex align-items-center">
+            @Html.CheckBoxFor(m => m.User.isBlocked, new {
+            @checked = @Model.User.isBlocked,
+            @style = "width:18px; height:18px;",
+            @class = "me-3"
+            })
+            <label asp-for="User.isBlocked">Is Blocked?</label>
+        </div>
+        <span asp-validation-for="User.isBlocked"></span>
+
+
+        <label class="mt-4" asp-for="User.Role">Select Role</label>
+        <select class="form-control my-2" asp-for="User.Role">
+            @foreach (var role in @Model.Roles)
+            {
+                if (@Model.User.Role == role.Name)
+                {
+                    <option value="@role.Id" selected>@role.Name</option>
+                }
+                else
+                {
+                    <option value="@role.Id">@role.Name</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="User.Role"></span>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+</form>
+
